@@ -68,9 +68,9 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    title: 'Using Maximum A Posteriori (MAP) Estimation for expense categorization within seconds',
-    description: 'turns out basic statistical method is far better than ml models for expesne categoriation',
-    link: '/blog/exploring-the-intersection-of-design-ai-and-design-engineering',
+    title: 'everything is just a matrix multiplication',
+    description: 'a structure as complex as neural networks can be reduced to a beautiful matrix multiplications',
+    link: '/blog/everything-is-just-a-matrix-multiplication',
     uid: 'blog-1',
   },
 ]

@@ -137,7 +137,18 @@ export default function Personal() {
       >
         <div className="flex-1">
           <p className="text-zinc-600 dark:text-zinc-400">
-          i'm an undergrad from pune, diving deep into computer engineering with a strong passion for machine learning, lately, i've been exploring how machines learn using linear algebra and statistics
+          curious being, trying to understand how machines learn through linear algebra, statistics, calculus.
+          currently exploring artificial intelligence
+          <a
+                  className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 p-1"
+                  href=""
+                  target="_blank"
+                >
+                  @iiit bangalore
+                  <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full"></span>
+                </a>
+            and trying to find a match on bumble. 
+           
           </p>
         </div>
       </motion.section>
