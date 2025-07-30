@@ -15,11 +15,7 @@ Notice the weight matrix dimensions (784x128). This isn't arbitrary - it's caref
 
 ## Backward Pass: Gradient Updates Made Manageable
 
-The backward pass was initially the most challenging part. But with matrices, gradient calculations became surprisingly manageable. For a mean squared error loss, the weight update simplifies to:
-
-
-
-*(Insert image suggestion: Illustration of gradient flow through matrix operations)*
+The backward pass was initially the most challenging part. But with matrices, gradient calculations became surprisingly manageable.
 
 The matrix operations handle all samples simultaneously, eliminating per-sample loops. This is where the true power of matrix notation shines - it abstracts away the complexity while preserving the mathematical essence.
 
