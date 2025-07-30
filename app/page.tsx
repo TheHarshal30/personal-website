@@ -141,7 +141,7 @@ export default function Personal() {
           currently exploring artificial intelligence
           <a
                   className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 p-1"
-                  href=""
+                  href="https://www.iiitb.ac.in"
                   target="_blank"
                 >
                   @iiit bangalore

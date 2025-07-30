@@ -68,9 +68,9 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    title: 'everything is just a matrix multiplication',
+    title: 'How I Built a Neural Network from Scratch Without Losing My Mind',
     description: 'a structure as complex as neural networks can be reduced to a beautiful matrix multiplications',
-    link: '/blog/everything-is-just-a-matrix-multiplication',
+    link: '/blog/blog-1',
     uid: 'blog-1',
   },
 ]
