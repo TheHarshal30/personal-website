@@ -1,5 +1,7 @@
 # How I Built a Neural Network from Scratch Without Losing My Mind
 
+(just a quick heads up, this is not meant to be a coding tutorial but a way to visualize neural networks using linear algebra )
+
 After learning about neural networks from various tutorials and lectures, I decided to build one from scratch to understand the inner workings. However, a few days into the project, I found myself drowning in nested for-loops and struggling to keep track of the numerous variables involved in forward and backward propagation.
 
 That's when I had a thought: **representing inputs and weights as matrices and using matrix transformations** for propagation could simplify everything significantly. This approach would make the code easier to understand, visualize, and maintain.
@@ -10,6 +12,7 @@ I started by rewriting the forward pass using matrices. Instead of looping throu
 
 
 <img src="/feed.png" alt="Alt text for the image" style={{ borderRadius: "12px" }} />
+(image is generated using gpt, if you find any faluts pls reach out [here](https://help.openai.com/en))
 
 Notice the weight matrix dimensions (784x128). This isn't arbitrary - it's carefully designed to transform our 784-dimensional input into a 128-dimensional representation suitable for the next layer. Essentially, we're performing a linear transformation of the input space.
 
@@ -17,7 +20,7 @@ Notice the weight matrix dimensions (784x128). This isn't arbitrary - it's caref
 
 The backward pass was initially the most challenging part. But with matrices, gradient calculations became surprisingly manageable.
 
-The matrix operations handle all samples simultaneously, eliminating per-sample loops. This is where the true power of matrix notation shines - it abstracts away the complexity while preserving the mathematical essence.
+The matrix operations handle all samples simultaneously, eliminating per-sample loops. This is where the true power of matrix notation shines.
 
 ## Building the Full Network: MNIST Digit Recognition
 
