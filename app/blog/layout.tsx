@@ -2,6 +2,12 @@
 import { TextMorph } from '@/components/ui/text-morph'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
 import { useEffect, useState } from 'react'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
+
+export const remarkPlugins = [remarkMath]
+export const rehypePlugins = [rehypeKatex]
 
 function CopyButton() {
   const [text, setText] = useState('Copy')
@@ -29,6 +35,7 @@ function CopyButton() {
 }
 
 export default function LayoutBlogPost({
+  
   children,
 }: {
   children: React.ReactNode

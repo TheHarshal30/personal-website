@@ -19,8 +19,13 @@ Notice the weight matrix dimensions (784x128). This isn't arbitrary - it's caref
 ## Backward Pass: Gradient Updates Made Manageable
 
 The backward pass was initially the most challenging part. But with matrices, gradient calculations became surprisingly manageable.
+Lets assume we are using mean squared loss, then derivating it with respect to weights looks like this:
 
-The matrix operations handle all samples simultaneously, eliminating per-sample loops. This is where the true power of matrix notation shines.
+<img src="/backpas.png" alt="Alt text for the image" style={{ borderRadius: "12px" }} />
+
+The equation finally boils down to multiplying derivative of loss fucntion with input matrix X
+
+Also, the matrix operations handle all samples simultaneously, eliminating per-sample loops. This is where the true power of matrix notation shines.
 
 ## Building the Full Network: MNIST Digit Recognition
 

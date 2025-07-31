@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { XIcon } from 'lucide-react'
 import { Spotlight } from '@/components/ui/spotlight'
 import { Magnetic } from '@/components/ui/magnetic'
+import 'katex/dist/katex.min.css'
 import {
   MorphingDialog,
   MorphingDialogTrigger,
