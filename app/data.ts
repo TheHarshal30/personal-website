@@ -74,7 +74,7 @@ export const BLOG_POSTS: BlogPost[] = [
     uid: 'blog-1',
   },
     {
-    title: 'Orthogonal foudations seems to be helpful',
+    title: 'The Curious Case of Well-Behaved Matrices',
     description: 'initializing weights orthogonally keeps the gradients from vanishing/exploding',
     link: '/blog/blog-2',
     uid: 'blog-2',

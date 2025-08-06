@@ -51,7 +51,7 @@ Using [submultiplicative property of matrx norms](https://math.stackexchange.com
 <img src="/normanal.png" alt="latex grad" style={{ borderRadius: "0px" }} />
 </div>
 
-but from earlier equation I rewrote the gradient equation by replacing jacobian matrix with weight matrix like this:
+from earlier equation I rewrote the gradient equation by replacing jacobian matrix with weight matrix like this:
 
 <div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
 <img src="/gradientnorm.png" alt="latex grad" style={{ borderRadius: "0px" }} />
@@ -87,7 +87,7 @@ and thus we get
 </div>
 
 
-The in equation from "Expressing gradient equation using matrix norms", the spectral norm of weight matrix wil be replced like this 
+The in equation from *Expressing gradient equation using matrix norms*, the spectral norm of weight matrix wil be replced like this 
 
 <div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
 <img src="/spectral.png" alt="latex grad" style={{ borderRadius: "0px" }} />
@@ -110,4 +110,38 @@ and thus I can substitute this in original gradient norm equations resulting in:
 <img src="/final.png" alt="latex grad" style={{ borderRadius: "0px" }} />
 </div>
 
-As you can see the gradients are stable and they wont explode or vanish even if we have huge depth in our neural network
+As you can see the gradients are stable and they won't explode or vanish even if we have huge depth in our neural network
+
+
+##  Thank god, the math works out
+I modified my code from last blog by increasing layers and thier widhts and initliazing weights orthogonally using QR decomposition 
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/modified.png" alt="latex grad" style={{ borderRadius: "12px"  }} />
+</div>
+
+And turns out the all this math that i did till now works out (thank god!). 
+I plotted the gradient norms vs layer depth for gaussian weights and orthogonal weights. 
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/compare.png" alt="latex grad" style={{ borderRadius: "12px"  }} />
+</div>
+
+Clearly, for gaussian initialized weights the norm of gradients are exploded while for orthogonally initialized weights the gradient norms stay within a good range. 
+
+(I generated synthetic data using np.rand for this)
+
+
+## But how are the weights Orthogonal throughtout the training process
+I tried to verify if the weights are orthogonal or nearly orthogonal by tracking them during backpropogation
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/error.png" alt="latex grad" style={{ borderRadius: "12px"  }} />
+</div>
+
+Even after working out the math and implementing everything, I still cant undertstand how the weights remain orthogonal or nearly orthogonal. Maybe a good topic for next blog.
+
+
+Hope you got some good insights from this!
+
+
