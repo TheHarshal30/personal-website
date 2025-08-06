@@ -1,0 +1,113 @@
+# The Curious Case of Well-Behaved Matrices
+
+Few days ago, a friend of mine suggested to use "low rank methods" in my neural networks from scratch work to showcase how basic concepts of linear algebra play an important role in neural networks. I started digging into the topic and while surfing the internet i stumbled upon this comment on reddit saying "initialize your weights orthogonally for better stable gradients".
+
+The idea of orthogonally initialized weights is fasinating but I couldn't find any good explanation stating why this method works, so i decided to cook up some maths myself.
+
+
+## 1. Understanding gradients
+To understand how orthogonal initialization will help I started analyzing the Gradient matrix. I wrote the gradient equation and broke it into three major parts like this:
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/gradeqn.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+This scary looking expression is nothing but chain of matrix products which helps in visualizing how gradients flow in neural networks
+
+- The **first term** is the gradient of the loss with respect to the output of the last layer.
+- The **middle term** forms a sequence of **Jacobian matrices**, each representing how the output of one layer depends on the previous.
+- The **last term** is the *local gradient*, i.e., how the output of layer \( l \) depends on its own weights.
+
+What matters here is the middle product of Jacobians, because it carries the gradient signal backward through the layers
+
+## 2. Analyzing Jacobians 
+Considering a linear layer like this 
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/simplefeed.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+its jacobian will be written as
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/jacobian.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+again a scary looking equation but its just simple calculas
+
+### key oberservaton from this equation are:
+- If I use ReLU as my activation then derivative of it will be either 0 or 1
+- The jacobian matrix is directly dependent on weight matrix
+
+thus the product of jacobian matrix in the first equation can be replaced by 
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/jacobweight.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+
+## 3. Expressing gradient equation using matrix norms
+Using [submultiplicative property of matrx norms](https://math.stackexchange.com/questions/487855/proof-of-matrix-norm-property-submultiplicativity) on the gradient equation
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/normanal.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+but from earlier equation I rewrote the gradient equation by replacing jacobian matrix with weight matrix like this:
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/gradientnorm.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+## 4. Case 1: Gaussian Initialization of weights 
+If I initialize weights with entires drawn i.i.d from normal distribution 
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/normal.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+then the spectral norm of weight matrix will be
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/root.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+
+this is beacuse 
+- the output of multiplying a vector with gaussian W is just weighted sum of **n** gaussian columns 
+- each component in such product will be a gaussian with variance 1
+- thus the squared norm will be expected value of gaussian, i.e **n**
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/expected.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+and thus we get
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/rootN.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+
+The in equation from "Expressing gradient equation using matrix norms", the spectral norm of weight matrix wil be replced like this 
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/spectral.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+This will grow exponential for n > 1 and will vanish quickly for n < 1, and thus inturn affect the value of gradient(as we proved earlier gradient values directlty depend upon wegiht matrix)
+
+
+## 5. Case 2: Orthogonal Initlization
+If we initiliazile weights orthogonally by using QR decomposition on wegihts sampled from normal distribution then we know that its sigular values will be 1
+because
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/ortho.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+and thus I can substitute this in original gradient norm equations resulting in:
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+<img src="/final.png" alt="latex grad" style={{ borderRadius: "0px" }} />
+</div>
+
+As you can see the gradients are stable and they wont explode or vanish even if we have huge depth in our neural network
