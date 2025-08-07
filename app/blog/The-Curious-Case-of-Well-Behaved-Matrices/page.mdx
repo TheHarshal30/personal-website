@@ -6,7 +6,7 @@ The idea of orthogonally initialized weights is fascinating, but I couldn't find
 
 ---
 
-## 1. Understanding Gradients
+## 1. Understanding gradients
 
 To understand how orthogonal initialization helps, I started analyzing the gradient matrix. I wrote the gradient equation and broke it into three major parts like this:
 
@@ -24,7 +24,7 @@ What matters here is the middle product of Jacobians because it carries the grad
 
 ---
 
-## 2. Analyzing Jacobians
+## 2. Analyzing jacobians
 
 Considering a linear layer like this:
 
@@ -53,7 +53,7 @@ Thus, the product of Jacobian matrices in the first equation can be replaced by:
 
 ---
 
-## 3. Expressing Gradient Equation Using Matrix Norms
+## 3. Expressing gradient equation using matrix norms
 
 Using the [submultiplicative property of matrix norms](https://math.stackexchange.com/questions/487855/proof-of-matrix-norm-property-submultiplicativity) on the gradient equation:
 
@@ -69,7 +69,7 @@ From the earlier equation, I rewrote the gradient equation by replacing the Jaco
 
 ---
 
-## 4. Case 1: Gaussian Initialization of Weights
+## 4. Case 1: Gaussian initialization of weights
 
 If I initialize weights with entries drawn i.i.d. from a normal distribution:
 
@@ -109,7 +109,7 @@ This will grow exponentially for \( n > 1 \) and will vanish quickly for \( n < 
 
 ---
 
-## 5. Case 2: Orthogonal Initialization
+## 5. Case 2: Orthogonal initialization
 
 If we initialize weights orthogonally by using QR decomposition on weights sampled from a normal distribution, then we know that their singular values will be 1 because:
 
@@ -127,7 +127,7 @@ As you can see, the gradients are stable and won’t explode or vanish even if w
 
 ---
 
-## Thank God, the Math Works Out
+## Thank god, the math works out
 
 I modified my code from the last blog by increasing layers and their widths and initializing weights orthogonally using QR decomposition.
 
@@ -148,7 +148,7 @@ Clearly, for Gaussian-initialized weights, the norms of gradients explode, while
 
 ---
 
-## But How Are the Weights Orthogonal Throughout the Training Process???
+## But how are the weights orthogonal throughout the training process???
 
 I tried to verify if the weights are orthogonal or nearly orthogonal by tracking them during backpropagation:
 
