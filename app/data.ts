@@ -70,14 +70,14 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     title: 'How I Built a Neural Network from Scratch Without Losing My Mind',
     description: 'a structure as complex as neural networks can be reduced to a beautiful matrix multiplications',
-    link: '/blog/blog-1',
-    uid: 'blog-1',
+    link: '/blog/How-I-Built-a-Neural-Network-from-Scratch-Without-Losing-My-Mind',
+    uid: 'How-I-Built-a-Neural-Network-from-Scratch-Without-Losing-My-Mind',
   },
     {
     title: 'The Curious Case of Well-Behaved Matrices',
     description: 'initializing weights orthogonally keeps the gradients from vanishing/exploding',
-    link: '/blog/blog-2',
-    uid: 'blog-2',
+    link: '/blog/The-Curious-Case-of-Well-Behaved-Matrices',
+    uid: 'The-Curious-Case-of-Well-Behaved-Matrices',
   },
 ]
 
