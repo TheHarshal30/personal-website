@@ -53,7 +53,7 @@ export const WORK_EXPERIENCE: WorkExperience[] = [
     title: 'Software Developer - Freelance',
     start: 'Jun 2024',
     end: 'Oct 2024',
-    link: 'https://drive.google.com/file/d/1VRXkBL7g8-bZSoKwO8Qy-HQ-1oKc0BHV/view',
+    link: '',
     id: 'work1',
   },
   {
@@ -78,6 +78,13 @@ export const BLOG_POSTS: BlogPost[] = [
     description: 'initializing weights orthogonally keeps the gradients from vanishing/exploding',
     link: '/blog/The-Curious-Case-of-Well-Behaved-Matrices',
     uid: 'The-Curious-Case-of-Well-Behaved-Matrices',
+  },
+  {
+    title: 'The Persistent Orthogonality of Trained Weight Matrices',
+    description: 'how are weight matrices stay orthogonal or nearly orthogonal',
+    link: '/blog/The-Persistent-Orthogonality-of-Trained-Weight-Matrices',
+    uid: 'The-Persistent-Orthogonality-of-Trained-Weight-Matrices',
+
   },
 ]
 

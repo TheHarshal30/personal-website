@@ -1,0 +1,262 @@
+# Persistent Orthogonality of Trained Weight Matrices
+
+## TL;DR
+- **Implicit Regularization**: Gradient descent isn’t just a blind search; it respects the initial parameterization.  
+  The algorithm gently changes the weights without violently breaking the beneficial structure we started with.  
+
+- **Training Stability**: Orthogonal matrices preserve norms, which helps prevent exploding or vanishing gradients.  
+  The derivation shows that training maintains this property, explaining why orthogonal initialization often leads to more stable training.  
+
+- **A New Perspective**: It suggests that carefully chosen initializations aren’t just a good starting point, they can define a *subspace* or a *manifold* within which the entire optimization process occurs.  
+
+---
+
+I was surprised to notice that weight matrices initialized orthogonally tend to remain nearly orthogonal even after training. This got me into thinking, even after applying nonlinear activations and running gradient descent over and over, that structure should have collapsed.
+
+Experimenting with generated data and few steps of training was somehow preserving the orthogonality but this wasn't a reasonable explanation. I was looking for some good mathematical proof of this persistence.
+
+Then I recalled Gilbert Strang's discussion on Matrix Perturbation Theory *"how small changes in a matrix affect its properties."*. That instantly clicked the thought, perhaps training won’t destroy or change the matrix completely but only perturbs it in a way that the structure remains intact. And the only way to track these changes is to measure how much $W ^\top W$ drifts away from identity matrix (as weights matrices are initialized orthogonally, $W ^ \top W $ before training equals identity matrix)
+
+---
+
+### Playing around with gradient descent
+
+$$
+W_{t+1} = W_t - \eta \nabla \mathcal{L}(W_t)
+$$
+
+If I apply this repeatedly i'll get something like this 
+
+$$
+\begin{aligned}
+W_t 
+&= W_{t-1} - \eta \nabla \mathcal{L}(W_{t-1}) \\
+&= \big(W_{t-2} - \eta \nabla \mathcal{L}(W_{t-2})\big) - \eta \nabla \mathcal{L}(W_{t-1}) \\
+&\,\,\vdots \\
+&= W_0 - \eta \sum_{k=0}^{t-1} \nabla \mathcal{L}(W_k).
+\end{aligned}
+$$
+
+So basically after this unrolling of gradients I can write gradient equation in terms of weight matrix before training and after training as follows 
+$$
+W(t) - W(0) \;=\; -\,\eta \sum_{k=0}^{t-1} \nabla \mathcal{L}\!\left(W(k)\right).
+$$
+
+$$
+W(t) - W(0) \;=\; - \sum_{k=0}^{t-1} \eta_k \,\nabla \mathcal{L}\!\left(W(k)\right).
+$$
+
+If I use gradient clipping technique, which will basically set a threshold for gradient values like this:
+
+$$
+\bigl\|\nabla \mathcal{L}(W_k)\bigr\| \;\le\; G \quad \text{for all } k,
+$$
+
+then by triangle inequality and submultiplicativity properties I can write the gradient descent equation as
+
+$$
+\|W(t) - W(0)\|
+\;=\;
+\left\| \eta \sum_{k=0}^{t-1} \nabla \mathcal{L}(W_k) \right\|
+\;\le\;
+\eta \sum_{k=0}^{t-1} \bigl\|\nabla \mathcal{L}(W_k)\bigr\|
+\;\le\;
+\eta \, t \, G.
+$$
+
+
+---
+
+### Measuring how far has the weight matrix gone from identity
+
+To find out how far the weight matrix is from being and identity, I have to calculate the value of
+
+$$
+\lVert W(t)^{\top} W(t) - W(0)^{\top} W(0) \rVert
+$$
+
+
+For this I used a very common matrix identity in matrix perturbation theory
+
+$$
+A^\top A - B^\top B
+\;=\;
+A^\top(A-B) + (A^\top - B^\top)B.
+$$
+
+it can be easily verified that LHS and RHS of this equation are same (which is left as an exercise for reader)
+
+Now by applying norms and making use of submultiplicativity property and triangle inequality, the following equation can be derived
+$$
+\|A^\top A - B^\top B\|
+\;\le\;
+\|A^\top(A-B)\| + \|(A^\top - B^\top)B\|
+\;\le\;
+\|A\|\,\|A-B\| + \|A-B\|\,\|B\|.
+$$
+
+
+$$
+\boxed{\;
+\|A^\top A - B^\top B\|
+\;\le\; (\|A\| + \|B\|)\,\|A-B\|
+\;}
+$$
+
+
+And since 
+$$
+\|A\| + \|B\| \leq 2 \max(\|A\|, \|B\|)
+$$
+
+I can re-write entire equation as 
+$$
+\boxed{\;
+\|A^\top A - B^\top B\|
+\;\le\; 2\,\max(\|A\|,\|B\|)\,\|A-B\|
+\;}
+$$
+
+
+### Using this matrix identity for weights
+Let \(A = W(t)\), \(B = W(0)\). Then
+
+$$
+\|W(t)^\top W(t) - W(0)^\top W(0)\|
+\;\le\; 2 \,\max\big(\|W(t)\|, \|W(0)\|\big)\,\|W(t) - W(0)\|
+$$
+
+I already know that 
+$$
+\|W(t) - W(0)\|
+\;\le\;
+\eta \, t \, G.
+$$
+
+Substituting this in above equation 
+
+
+
+$$
+\|W(t)^\top W(t) - W(0)^\top W(0)\|
+\;\le\; 2 \,\max\big(\|W(t)\|, \|W(0)\|\big)\;
+\eta \, t \, G.
+$$
+
+The norm of matrix W(0) will be equal to 1, so the equation will be 
+
+$$
+\|W(t)^\top W(t) - W(0)^\top W(0)\|
+\;\le\; 2 \,\max\big(\|W(t)\|, 1)\;
+\eta \, t \, G.
+$$
+
+
+Thus an upper bound for how much the weight matrix will differ from orthogonally initialized matrix after training is obtained
+
+--- 
+
+I started with a simple observation: **orthogonality persists**.  
+Through matrix perturbation theory, I found a mathematical bound for this phenomenon:
+
+$$
+\|W(t)^\top W(t) - I\| \;\le\; 2 \,\max(\|W(t)\|, 1)\,\eta t G.
+$$
+
+At first glance, this bound seems circular, it requires knowing $\|W(t)\|$, a property of the trained matrix I was trying to understand.  
+But this is where the initial observation and the theory converge beautifully.  
+The very fact that we observe $W(t)$ to be nearly orthogonal means its singular values are all near $1$, so $\|W(t)\| \approx 1$.  
+This collapses the bound into a much more intuitive form:  
+
+$$
+\|W(t)^\top W(t) - I\| \;\lesssim\; 2 \eta t G.
+$$
+
+---
+
+### Fascinating Implications
+
+- **Implicit Regularization**: Gradient descent isn’t just a blind search; it respects the initial parameterization.  
+  The algorithm gently changes the weights without violently breaking the beneficial structure we started with.  
+
+- **Training Stability**: Orthogonal matrices preserve norms, which helps prevent exploding or vanishing gradients.  
+  The derivation shows that training maintains this property, explaining why orthogonal initialization often leads to more stable training.  
+
+- **A New Perspective**: It suggests that carefully chosen initializations aren’t just a good starting point, they can define a *subspace* or a *manifold* within which the entire optimization process occurs.
+
+---
+
+### Practically testing things 
+
+
+A mathematical bound is only as interesting as its connection to reality.  
+To test the derivation, I trained a simple classifier on **MNIST** using orthogonally initialized weights and gradient clipping ($G = 1.0$).
+
+The theory gives a strict upper limit:
+
+$$
+\|W(t)^\top W(t) - I\| \;\le\; 2 \,\max(\|W(t)\|, 1)\,\eta t G.
+$$
+
+After training for **10 epochs**, the model reached a respectable **95.4% validation accuracy**.  
+Let's look at the final numbers:
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Validation Accuracy</td>
+      <td>0.9537</td>
+    </tr>
+    <tr>
+      <td>Final Gradient Norm $G$</td>
+      <td>0.9009</td>
+    </tr>
+    <tr>
+      <td>Final Weight Norm $\max(\lVert W(t)\rVert, 1)$</td>
+      <td>16.3235</td>
+    </tr>
+    <tr>
+      <td>Actual Deviation $\lVert W^\top W - I\rVert$</td>
+      <td>4.1151</td>
+    </tr>
+    <tr>
+      <td>Theoretical Upper Bound</td>
+      <td>1508.95</td>
+    </tr>
+    <tr>
+      <td>Bound / Actual Ratio</td>
+      <td>366.68</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+### What does this mean?
+
+- **The Bound Holds**: The most important result is that the actual deviation ($4.12$) is indeed less than the calculated upper bound ($1508.95$).
+
+- **The Bound is Conservative**: As is common in theoretical analysis, the bound is not tight.  
+  It's a worst-case scenario that assumes all gradient updates conspire in the most destructive direction.  
+  In practice, updates are noisy and often cancel each other out, leading to a much smaller actual change.  
+
+- **The Real Story is in the Trend**:  
+  The bound's linear growth with $t$ and its dependence on $\max(\|W(t)\|, 1)$ are the key insights.  
+  The fact that the actual deviation remains **orders of magnitude smaller** shows that training is a remarkably stable perturbation process, not a destructive one.  
+
+
+---
+Hope you got some good insights :)
+
+Have a great day!
+
+
+
+
+
